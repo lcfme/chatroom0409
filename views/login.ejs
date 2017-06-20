@@ -1,0 +1,116 @@
+<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="css/reset.css">
+<script src="js/jquery.js"></script>
+<title>Chattus</title>
+<style>
+	*, *::before, *::after {
+		padding: 0;
+		margin: 0;
+		box-sizing: border-box;
+	}
+	body {
+		position: relative;
+		font-family: helvetica, sans-serif;
+		background-image: url(img/fdf012c35ab34eb18a38162efa9883b1.jpg);
+		background-size: cover;
+		background-position: center center;
+	}
+
+	body::after {
+		content: "";
+		display: block;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(11,10,0,0.8);
+		z-index: 1;
+	}
+	.w {
+		position: relative;
+		width: 98%;
+		max-width: 700px;
+		margin: 0 auto;
+		overflow: hidden;
+		z-index: 10;
+	}
+
+	input {
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		display: block;
+		width: 100%;
+		margin-bottom: 20px;
+		height: 40px;
+		line-height: 40px;
+		font-size: 18px;
+	}
+
+	button {
+		display: block;
+		height: 40px;
+		width: 100%;
+		line-height: 40px;
+		font-size: 18px;
+		text-align: center;
+		color: #fff;
+		border-radius: 5px;
+		border: 2px solid rgba(0,0,0, 0.3);
+		margin-bottom: 10px;
+	}
+	button:nth-of-type(1) {
+		background: #FF1981;
+	}
+
+	button:nth-of-type(2) {
+		background: #006ADD;
+	}
+
+	#alert-zone {
+		color: #F8266C;
+		border-radius: 4px;
+		font-size: 14px;
+		line-height: 28px;
+		height: 28px;
+	}
+</style>
+<form action="login" method="POST" id="login_form" class="w" style="top: 15%;">
+	<div id="alert-zone"></div>
+	<input type="text" name="user_id" placeholder="请输入用户名">
+	<input type="password" name="user_password" placeholder="请输入密码">
+	<input type="text" name="user_nickname" placeholder="设置一个昵称，注册时才需输入">
+	<button type="button" id="login">登录</button>
+	<button type="button" id="register">注册</button>
+</form>
+<script>
+	$('#login').click(function(e) {
+		e.preventDefault();
+		var user_id = $('[name=user_id]').val().trim();
+		var user_password = $('[name=user_password]').val().trim();
+		if (/[^\w]/.test(user_id) || /[^\w]/.test(user_password)) return;
+		$.post('login', {
+			user_id: user_id,
+			user_password: user_password,
+		},function(data, status) {
+			console.log(data, status);
+			data == 1 ? window.location = '/' : $('#alert-zone').html('ERROR!');
+		});
+	});
+
+	$('#register').click(function(e) {
+		e.preventDefault();
+		var user_id = $('[name=user_id]').val().trim();
+		var user_password = $('[name=user_password]').val().trim();
+		var user_nickname = $('[name=user_nickname]').val().trim();
+		if (/[^\w]/.test(user_id) || /[^\w]/.test(user_password)) return;
+		$.post('register', {
+			user_id: user_id,
+			user_password: user_password,
+			user_nickname: user_nickname,
+		},function(data, status) {
+			data == 1 ? $('#alert-zone').html('注册成功') : $('#alert-zone').html('ERROR!').css('background', '#272822');
+		});
+	});
+
+</script>

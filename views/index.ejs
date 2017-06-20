@@ -1,0 +1,123 @@
+<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChatRoom:: <%= user_id %> ^O^</title>
+<link rel="stylesheet" href="css/reset.css">
+<script src="js/jquery.js"></script>
+
+<style>
+	*, *::before, *::after {
+		box-sizing: border-box;
+	}
+	body {
+		font-family: helvetica, sans-serif;
+	}
+	.w {
+		width: 98%;
+		max-width: 700px;
+		margin: 0 auto;
+		overflow: hidden;
+	}
+	.welcome {
+		position: fixed;
+		width: 100%;
+		top: 0;
+		left: 0;
+		height: 40px;
+		font-size: 18px;
+		line-height: 40px;
+		background-image: linear-gradient(#040404, #010101);
+		color: #fff;
+		box-shadow: 2px 2px 10px 2px #ccc;
+	}
+
+	.main {
+		color: #343433;
+		padding: 60px 0px 20px 0px;
+	}
+
+	.main .item {
+		margin-bottom: 10px;
+		border-radius: 4px;
+		border: 1px solid #ccc;
+		padding: 10px 5px;
+		box-shadow: 1px 1px 2px 1px #f4f4f4;
+	}
+
+	.main .item .post_title {
+		font-size: 18px;
+		line-height: 30px;
+		height: 30px;
+	}
+
+	.main .item .post_title {
+		font-size: 16px;
+		line-height: 30px;
+		height: 30px;
+	}
+
+
+
+	.main .item span {
+		font-size: 12px;
+		color: #848484;
+		margin-right: 10px;
+	}
+
+	.main .item .post_body {
+		font-size: 14px;
+		line-height: 28px;
+	}
+
+	.main .item img {
+		display: block;
+		width: 100%;
+	}
+
+	.main .item .post_time {
+		font-size: 12px;
+		line-height: 24px;
+		color: #898988;
+	}
+
+</style>
+<% var i = Math.floor(Math.random() * 2); var welcome_words = i === 0 ? 'Kumusta, ' : '欢迎回来，'; %>
+<div class="welcome"><div class="w"><%= welcome_words %><%= user_id %>’’</div></div>
+<div class="main w" id="main"></div>
+<div class="interface w">
+<iframe src="html/submit.html" frameborder="0" style="width: 100%; height: 230px; overflow: hidden;"></iframe>
+</div>
+
+<script>
+(function() {
+	var render_dom_element = $('#main');
+	function retrieve_posts_data () {
+		$.get('/retrieve_posts_data', function(data, status) {
+			if(status !== 'success') render_dom_element.html("ERROR TO RETRIEVE DATA");
+			data = JSON.parse(data);
+			var str = "";
+			data.forEach(function(item, index, self) {
+				str += '<div class="item" data-order="' + index + '">';
+				str += '<div class="post_title"><span>标题</span>'+ item.post_title +'</div>';
+				str += '<div class="user_nickname"><span>用户名</span>' + (item.user_nickname !== 'undefined' ? item.user_nickname : '中情局也不知道Ta的名字哎') + '</div>';
+				str += '<div class="post_body"><span>内容</span>' + item.post_body + '</div>';
+				if (item.post_img) {
+					str += '<img src="' + item.post_img + '">';
+				}
+				str += '<div class="post_reviews">';
+				if (item.post_review.length !== 0) {
+					item.post_review.forEach(function(item, index, self) {
+						str += '<div class="post_review">' + item.comment + '</div>';
+					});
+				}
+				str += '</div>';
+				str += '<div class="post_time">' + (new Date(item.post_time).getMonth() + 1) + '月' + 	(new Date(item.post_time).getDate()) + '日&nbsp;&nbsp;' + (new Date(item.post_time	).getHours()) + ':' + (new Date(item.post_time).getMinutes()) + '</div>';
+				str += '</div>';
+	
+			});
+			render_dom_element.html(str);
+		});
+	}
+	setInterval(function() {
+		retrieve_posts_data();
+	}, 1000);
+}());
+</script>
