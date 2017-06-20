@@ -62,8 +62,8 @@ module.exports.add_posts_data = function(req, res) {
  			var tempObj = {
  				user_id: req.session.isloggedin,
  				post_id: post_id + 1,
- 				post_title: fields.post_title,
- 				post_body: fields.post_body,
+ 				post_title: !/[<>]/.test(fields.post_title) ? fields.post_title : false,
+ 				post_body: !/[<>]/.test(fields.post_body) ? fields.post_body : false,
  				post_time: new Number(new Date()),
  			}
 

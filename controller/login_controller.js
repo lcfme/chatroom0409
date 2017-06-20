@@ -53,10 +53,15 @@ module.exports.register = function(req, res, next) {
  			return;
  		}
  		var user = {
- 			user_id: fields.user_id,
- 			user_password: fields.user_password,
- 			user_nickname: fields.user_nickname,
+ 			user_id: !/[<>]/.test(fields.user_id) ? fields.user_id : false,
+ 			user_password: !/[<>]/.test(fields.user_password) ? fields.user_password : false,
+ 			user_nickname: !/[<>]/.test(fields.user_nickname) ? fields.user_nickname : false,
  		};
+
+ 		if (!fields.user_id || !fields.user_password || !fields.user_nickname) {
+ 			res.send("0");
+ 			return;
+ 		}
 
  		login_db_manipulate.addUser(user.user_id, user.user_password, user.user_nickname, function(err) {
 			if(err) {
