@@ -80,7 +80,7 @@
 
 </style>
 <% var i = Math.floor(Math.random() * 2); var welcome_words = i === 0 ? 'Kumusta, ' : '欢迎回来，'; %>
-<div class="welcome"><div class="w"><%= welcome_words %><%= user_id %>’’ 点击这里可刷新</div></div>
+<a href="javascript:;" class="welcome"><div class="w"><%= welcome_words %><%= user_id %>’’ 点击这里可刷新</div></a>
 <div class="main w" id="main"></div>
 <div class="interface w">
 <iframe src="html/submit.html" frameborder="0" style="width: 100%; height: 230px; overflow: hidden;"></iframe>
