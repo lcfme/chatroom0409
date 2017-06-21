@@ -125,5 +125,8 @@
 	$('.welcome').click(function(e) {
 		retrieve_posts_data();
 	});
+	setInterval(function() {
+		retrieve_posts_data();
+	}, 5000);
 }());
 </script>
